@@ -190,4 +190,92 @@ class Sort{
     }
     /*******************************快速排序 end***************************************/
 
+    /*******************************堆排序*********************************************/
+    /**
+     * 堆排序，首先要了解下堆的定义，堆的定义是，首先要是一个完全二叉树（每一层上的节点数
+     * 均达到最大值；在最后一层上只缺少右边的若干结点）或者满二叉树，所有父节点的值大于（
+     * 或者小于）叶子节点的值
+     * k(i) <= k(2i) && k(i) <= k(2i+1)      或者     k(i) >= k(2i) && k(i) >= k(2i+1)
+     * 其中i=1,2,3,...,n/2
+     * 根据堆顶元素为最小和最大值分为，小项堆和大项堆
+     *
+     * 堆排序的依据就是每次从从调整好的堆顶选出剩余元素的最大值或者最小值,然后和未排序元素
+     * 的尾部元素进行交换，交换后，未排序元素长度减1，重新调整为大项堆或者小项堆，重复上面
+     * 的过程
+     */
+    public static function heapSort(&$arr,$flag=true){
+        $flag ? self::heapSortUp($arr) : self::heapSortDown($arr);
+    }
+    /**
+     * 堆排序之升序
+     */
+    private static function heapSortUp(&$arr){
+        $len = count($arr);
+
+        //初始化堆
+        for($i=floor($len/2); $i>=0; $i--){
+            self::heapAdjustUp($arr, $i, $len-1);
+        }
+
+        for($i=0; $i<$len; $i++){
+            //将排好序的数放到争取的位置
+            $right = $len - $i - 1;
+            self::swap($arr[0], $arr[$right]); 
+            self::heapAdjustUp($arr, 0 , $right-2);
+        }
+    }
+
+    /**
+     * 堆排序之调整堆
+     */
+    private static function heapAdjustUp(&$arr, $pos, $end){
+        $child = 2*$pos+1;
+        while($child <= $end){
+            $child = $child+1 <= $end && $arr[$child+1] > $arr[$child] ? $child+1 : $child;
+            if($arr[$pos] < $arr[$child]){
+                self::swap($arr[$pos], $arr[$child]);
+                $pos    = $child;
+                $child = 2*$pos+1;
+            }else{
+                break;
+            }
+        }
+    }
+
+    /**
+     * 降序排序
+     */
+    private static function heapSortDown(&$arr){
+        $len = count($arr);
+
+        //初始化堆
+        for($i=floor($len/2); $i>=0; $i--){
+            self::heapAdjustDown($arr, $i, $len-1);
+        }
+
+        for($i=0; $i<$len; $i++){
+            $right = $len - $i -1;
+            self::swap($arr[0], $arr[$right]);
+            self::heapAdjustDown($arr, 0, $right-1);
+        }
+    }
+
+    /**
+     * 降序之调整堆
+     */
+    private static function heapAdjustDown(&$arr, $pos, $end){
+        $child = 2*$pos+1;
+        while ($child < $end) {
+            $child = $child+1 <= $end && $arr[$child+1] < $arr[$child] ? $child+1 : $child;
+            if($arr[$child] < $arr[$pos]){
+                self::swap($arr[$child], $arr[$pos]);
+                $pos    = $child;
+                $child  = 2*$pos+1;
+            }else{
+                break;
+            }
+        }
+    }
+    /*******************************堆排序 end*********************************************/    
+
 }
