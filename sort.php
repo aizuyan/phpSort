@@ -278,4 +278,65 @@ class Sort{
     }
     /*******************************堆排序 end*********************************************/    
 
+    /*******************************插入排序 **********************************************/
+    /**
+     * 插入排序的思想也很简单，把未排序的数组A中的元素一个一个的插入一个已经排好序的数组B，B
+     * 数组中的元素个数从0个开始
+     * 时间复杂度：
+     * 0 + 1 + 2 + ... + (n-2) + (n-1) = (n-1)*((n-1)+1)/2 = (n^2-n)/2
+     * 即为O(n^2)
+     * 
+     */
+    public static function insertSort(&$arr, $flag=true){
+        $flag ? self::insertSortUp($arr) : self::insertSortDown($arr);
+    }
+    /**
+     * 插入排序之升序
+     */
+    private static function insertSortUp(&$arr){
+        $_arr = $arr;
+        $arr  = array();
+        foreach ($_arr as $value) {
+            self::insertSortedArr($arr, $value);        }
+    }
+    /**
+     * 插入排序之降序
+     */
+    private static function insertSortDown(&$arr){
+        $_arr = $arr;
+        $arr  = array();
+        foreach ($_arr as $value) {
+            self::insertSortedArr($arr, $value, false);
+        }
+    }
+    /**
+     * 把一个数插入一个已经排序的数组
+     */
+    private static function insertSortedArr(&$arr, $value, $flag=true){
+        $pos = null;
+        foreach ($arr as $key => $val) {
+            if($flag){
+                if($val <= $value){
+                    continue;   
+                }
+                $pos = $key;
+                break;
+            }else{
+                if($val >= $value){
+                    continue;
+                }
+                $pos = $key;
+                break;
+            }
+        } 
+        if($pos === null){
+            $arr[] = $value;
+        }else{
+            for($i=count($arr); $i>$pos; $i--){
+                $arr[$i] = $arr[$i-1];
+            }
+            $arr[$pos] = $value;
+        }
+    }
+    /*******************************插入排序 end*******************************************/
 }
